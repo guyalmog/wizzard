@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- including head component-->
+  <%- include('../partials/head'); %>
+    <link rel="stylesheet" href="datatables/datatables.min.css">
+    <title>Wizzards Data</title>
+</head>
+
+<body>
+  <header class="bg-primary">
+    <div class="container">
+      <!-- including navbar -->
+      <%- include('../partials/navbar', {login: "yes" }) %>
+    </div>
+  </header>
+
+  <section id="wizards">
+    <div class="container">
+      <!-- display alert if have any -->
+      <% if(error){ %>
+        <div class=`alert <%=classname %>` role="alert">
+          <%= error %>
+        </div>
+        <%}%>
+
+          <!-- Display Wizards -->
+          <div class="row mt-5">
+            <table id="wizard_table" class="display">
+              <thead>
+                <tr>
+                  <th style="width:20px">#</th>
+                  <th>Wizzard Name</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <% if(wizard.length>0){
+                  for(let i=0; i<wizard.length; i++ ){ %>
+                    <tr>
+                      <td style="width:20px">
+                        <%= i %>
+                      </td>
+                      <td>
+                        <%= wizard[i].title%>
+                      </td>
+                      <td>
+                        <a class="btn btn-primary m-1" href="wdata/view/<%= wizard[i]._id %>">View</a>
+                        <a class="btn btn-danger m-1" href="wdata/del/<%= wizard[i]._id %>/<%= wizard[i].uid %>">Del Wizzard Data</a>
+                      </td>
+                    </tr>
+
+                    <% }} %>
+              </tbody>
+            </table>
+
+          </div>
+  </section>
+
+
+  <!-- including footer component -->
+  <%- include('../partials/footer') %>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="datatables/datatables.min.js"></script>
+
+    <script>
+      // 
+      $(document).ready(function () {
+        $('#wizard_table').DataTable({
+          ordering: false,
+        });
+      });
+    </script>
+</body>
+
+</html>
