@@ -106,16 +106,26 @@ export const editWizard = async (req, res) => {
 export const delWizard = async (req, res) => {
   try {
     const wid = req.params.wid;
-    // const uid = req.user._id;
+    const uid = req.user._id;
 
-    // removing from wForm
-    await wForm.deleteMany({ wid});
-    // removing wizzard data(submitted by users)
-    await wData.deleteMany({ wid });
     // removing from wizards
-    await wizard.findOneAndDelete({ _id: wid });
-
-    res.status(200).send("");
+    await wizard.findOneAndDelete({ _id: wid, uid });
+    // removing from wForm
+    await wForm.deleteMany({ wid, uid }, function (e, doc) {
+      if (doc) {
+        res.status(200).send("");
+      } else if (e) {
+        res.status(400).json(e);
+      }
+    }).clone().catch(err => console.log(err.message));
+    // removing wizzard data(submitted by users)
+    await wData.deleteMany({ wid, uid }, function (e, doc) {
+      if (doc) {
+        res.status(200).send("");
+      } else if (e) {
+        res.status(400).json(e);
+      }
+    }).clone().catch(err => console.log(err.message));
 
   } catch (error) {
     res.render("pages/wizards", ({
@@ -135,27 +145,18 @@ export const viewWizard = async (req, res) => {
     // finding wizzard pages details
     const pages = await wForm.find({ wid })
 
-    if(pages.length>0){
-      res.render("pages/viewWizard", ({
-        "wizard": wizardData,
-        "pages": pages,
-        "error": ''
-      }));
-    }else{
-      res.render("pages/viewWizard", ({
-        "wizard": '',
-        "pages": '',
-        "error": { message: "Opps! the wizzard has been removed by Owner",
-                 classname: "alert-danger" }
-      }));
-    }
+    res.render("pages/viewWizard", ({
+      wizard: wizardData,
+      pages: pages,
+      error: '',
+      message: ''
+    }));
 
   } catch (error) {
     res.render("pages/viewWizard", ({
-      "wizard": '',
-      "pages": '',
-      "error": { message: "Opps! the wizzard has been removed by Owner",
-               classname: "alert-danger" }
+      wizard: '',
+      error: { message: error.message, classname: "alert-danger" },
+      message: ''
     }));
   }
 }

@@ -22,7 +22,7 @@
       <h3 class="text-center text-primary mt-5">Please Login to Continue</h3>
       <form action="/login" method="POST" class="w-50 m-auto mt-5" id="login">
         <% if(error!='' ){ %>
-          <div class="alert alert-danger" role="alert">
+          <div class="alert <%= classname %>" role="alert">
             <%= error %>
           </div>
           <% } %>

@@ -33,6 +33,7 @@ export const login = async (req, res) => {
 
       } else {
         res.render("pages/login", ({
+          classname: "alert-danger",
           error: "Password is Incorrect!"
         }));
       }
@@ -40,6 +41,7 @@ export const login = async (req, res) => {
     } else {
       // if we dont have any data related to that email
       res.render("pages/login", ({
+        classname: "alert-danger",
         error: "User Does't Exist!"
       }));
     }
@@ -75,9 +77,9 @@ export const register = async (req, res) => {
       const token = await response.getToken();
       res.cookie("jwt", token, {
         httpOnly: true
-      }).status(201).render("pages/register", ({
+      }).status(201).render("pages/login", ({
         classname: "alert-success",
-        error: "Registered Successfuly!",
+        error: "Registered Successfuly! Go Ahead and Log In :)",
       }));
     }
   } catch (error) {
