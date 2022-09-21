@@ -7,8 +7,13 @@ import generalroute from './route/routes.js';
 import wizards from './route/wizards.js';
 import wdata from './route/wdata.js';
 
-// importing database connection
-import './database/db.js';
+import dotenv from 'dotenv';
+// configuring .env file
+dotenv.config();
+// mongodb
+import connectDb from "./database/db.js";
+const DATABASE_URL = process.env.DB_URL;
+connectDb(DATABASE_URL);
 
 const __dirname = Path.resolve();
 const app = express();
